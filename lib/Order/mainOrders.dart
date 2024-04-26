@@ -164,7 +164,13 @@ class _mainOrderState extends State<mainOrder> {
 
                 return GestureDetector(
                   onTap: () {
-                    print("Se presionó el ítem: ${restaurant.title}");
+                    /*
+                    Navigator.push(
+                      context,
+                      crearRuta(
+                          context, restaurantPage(restaurant: restaurant)),
+                    );
+                    */
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width * 1.0,
@@ -316,7 +322,7 @@ class _mainOrderState extends State<mainOrder> {
                         Container(
                           height: MediaQuery.of(context).size.height * 0.04,
                           width: MediaQuery.of(context).size.width * 0.26,
-                          padding: EdgeInsets.only(
+                          margin: EdgeInsets.only(
                             left: MediaQuery.of(context).size.height * 0.005,
                           ),
                           child: ElevatedButton(
@@ -329,18 +335,19 @@ class _mainOrderState extends State<mainOrder> {
                 */
                             },
                             style: ElevatedButton.styleFrom(
-                              primary: Color.fromARGB(255, 226, 226,
-                                  226), // Puedes cambiar el color aquí
+                              backgroundColor: const Color.fromARGB(255, 226,
+                                  226, 226), // Puedes cambiar el color aquí
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30.0),
                               ),
                             ),
-                            child: const Text(
-                              'See shop',
+                            child: Text(
+                              'See Shop',
                               style: TextStyle(
-                                fontSize: 13,
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.027,
                                 fontFamily: 'Quicksand-Bold',
-                                color: Color.fromARGB(255, 83, 83, 83),
+                                color: const Color.fromARGB(255, 83, 83, 83),
                               ),
                             ),
                           ),

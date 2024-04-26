@@ -1,3 +1,5 @@
+// ignore_for_file: sized_box_for_whitespace
+
 import 'package:flutter/material.dart';
 
 class mainProfile extends StatefulWidget {
@@ -45,11 +47,7 @@ class _mainProfileState extends State<mainProfile> {
             bottom: MediaQuery.of(context).size.height * 0.1,
           ),
           decoration: BoxDecoration(
-            color: Color.fromARGB(255, 0, 0, 0),
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(250.0),
-              bottomRight: Radius.circular(250.0),
-            ),
+            color: const Color.fromARGB(255, 0, 0, 0),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.2), // Color de la sombra
@@ -59,7 +57,7 @@ class _mainProfileState extends State<mainProfile> {
                     0, 3), // Desplazamiento horizontal y vertical de la sombra
               ),
             ],
-            image: DecorationImage(
+            image: const DecorationImage(
               fit: BoxFit.cover,
               image: AssetImage('assets/images/profile_background2.jpg'),
             ),
@@ -75,7 +73,7 @@ class _mainProfileState extends State<mainProfile> {
             ),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              image: DecorationImage(
+              image: const DecorationImage(
                 fit: BoxFit.cover,
                 image: AssetImage('assets/images/profile_Image.jpg'),
               ),
@@ -92,7 +90,7 @@ class _mainProfileState extends State<mainProfile> {
           ),
         ),
         Positioned(
-            top: MediaQuery.of(context).size.height * 0.165,
+            top: MediaQuery.of(context).size.height * 0.175,
             left: MediaQuery.of(context).size.height * 0.27,
             child: Container(
               height: MediaQuery.of(context).size.height * 0.045,
@@ -112,9 +110,9 @@ class _mainProfileState extends State<mainProfile> {
               ),
               child: IconButton(
                   onPressed: () {},
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.edit,
-                    color: const Color.fromARGB(255, 0, 0, 0),
+                    color: Color.fromARGB(255, 0, 0, 0),
                   )),
             ))
       ],
@@ -172,11 +170,11 @@ class _mainProfileState extends State<mainProfile> {
                       Container(
                         height: MediaQuery.of(context).size.height * 0.07,
                         width: MediaQuery.of(context).size.width * 0.12,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Color.fromARGB(255, 255, 146, 82),
                           shape: BoxShape.circle,
                         ),
-                        child: Icon(
+                        child: const Icon(
                           Icons.wallet_rounded,
                           size: 27,
                           color: Color.fromARGB(255, 0, 0, 0),
@@ -205,7 +203,7 @@ class _mainProfileState extends State<mainProfile> {
                         margin: EdgeInsets.only(
                           left: MediaQuery.of(context).size.height * 0.045,
                         ),
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Color.fromARGB(255, 225, 225, 225),
                           shape: BoxShape.circle,
                         ),
@@ -213,7 +211,7 @@ class _mainProfileState extends State<mainProfile> {
                           onPressed: () {
                             print("Se presiono");
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.arrow_forward_ios_rounded,
                             size: 25,
                             color: Color.fromARGB(158, 0, 0, 0),
@@ -231,11 +229,11 @@ class _mainProfileState extends State<mainProfile> {
                       Container(
                         height: MediaQuery.of(context).size.height * 0.07,
                         width: MediaQuery.of(context).size.width * 0.12,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Color.fromARGB(255, 255, 146, 82),
                           shape: BoxShape.circle,
                         ),
-                        child: Icon(
+                        child: const Icon(
                           Icons.person,
                           size: 27,
                         ),
@@ -263,7 +261,7 @@ class _mainProfileState extends State<mainProfile> {
                         margin: EdgeInsets.only(
                           left: MediaQuery.of(context).size.height * 0.045,
                         ),
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Color.fromARGB(255, 225, 225, 225),
                           shape: BoxShape.circle,
                         ),
@@ -271,7 +269,7 @@ class _mainProfileState extends State<mainProfile> {
                           onPressed: () {
                             print("Se presiono");
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.arrow_forward_ios_rounded,
                             size: 25,
                             color: Color.fromARGB(158, 0, 0, 0),
@@ -289,11 +287,11 @@ class _mainProfileState extends State<mainProfile> {
                       Container(
                         height: MediaQuery.of(context).size.height * 0.07,
                         width: MediaQuery.of(context).size.width * 0.12,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Color.fromARGB(255, 255, 146, 82),
                           shape: BoxShape.circle,
                         ),
-                        child: Icon(
+                        child: const Icon(
                           Icons.admin_panel_settings,
                           size: 27,
                         ),
@@ -321,7 +319,7 @@ class _mainProfileState extends State<mainProfile> {
                         margin: EdgeInsets.only(
                           left: MediaQuery.of(context).size.height * 0.045,
                         ),
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Color.fromARGB(255, 225, 225, 225),
                           shape: BoxShape.circle,
                         ),
@@ -329,7 +327,7 @@ class _mainProfileState extends State<mainProfile> {
                           onPressed: () {
                             print("Se presiono");
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.arrow_forward_ios_rounded,
                             size: 25,
                             color: Color.fromARGB(158, 0, 0, 0),
@@ -374,11 +372,11 @@ class _mainProfileState extends State<mainProfile> {
                   Container(
                     height: MediaQuery.of(context).size.height * 0.07,
                     width: MediaQuery.of(context).size.width * 0.12,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.red,
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.login_rounded,
                       size: 25,
                     ),

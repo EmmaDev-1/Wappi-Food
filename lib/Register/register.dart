@@ -104,8 +104,8 @@ class _registerPageState extends State<registerPage> {
       decoration: const BoxDecoration(
         color: Color.fromARGB(255, 255, 255, 255),
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(60.0),
-          topRight: Radius.circular(60.0),
+          topLeft: Radius.circular(30.0),
+          topRight: Radius.circular(30.0),
         ),
       ),
       child: Column(
@@ -312,7 +312,7 @@ class _registerPageState extends State<registerPage> {
                 );
               },
               style: ElevatedButton.styleFrom(
-                primary: const Color.fromARGB(
+                backgroundColor: const Color.fromARGB(
                     255, 255, 94, 0), // Puedes cambiar el color aquí
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),

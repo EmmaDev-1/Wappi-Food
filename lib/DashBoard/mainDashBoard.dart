@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:project/Navegation/navegationAnimation.dart';
 import 'package:project/Order/mainOrders.dart';
 import 'package:project/Profile/mainProfile.dart';
+import 'package:project/Restaurant/restaurant.dart';
 
 import '../ShoppingBag/mainShoppingBags.dart';
 
@@ -64,7 +66,7 @@ class _mainDashBoardState extends State<mainDashBoard> {
     ListItem(imagePath: 'assets/images/icon_beer.png', title: 'Alcohol'),
     ListItem(imagePath: 'assets/images/icon_breakfast.png', title: 'Breakfast'),
     ListItem(imagePath: 'assets/images/icon_cake.png', title: 'Desserts'),
-    ListItem(imagePath: 'assets/images/icon_salads.png', title: 'Saldas'),
+    ListItem(imagePath: 'assets/images/icon_salads.png', title: 'Salads'),
     ListItem(imagePath: 'assets/images/icon_sandwich.png', title: 'Sandwiches'),
     ListItem(imagePath: 'assets/images/icon_taco.png', title: 'Tacos'),
     ListItem(imagePath: 'assets/images/icon_hotDog.png', title: 'Hot Dogs'),
@@ -316,8 +318,7 @@ class _mainDashBoardState extends State<mainDashBoard> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => mainShoppingBag()),
+                          crearRuta(context, mainShoppingBag()),
                         );
                       },
                       child: Container(
@@ -394,11 +395,7 @@ class _mainDashBoardState extends State<mainDashBoard> {
 
   foodContent() {
     return Container(
-        height: MediaQuery.of(context).size.height * 0.17,
-        padding: EdgeInsets.only(
-          left: MediaQuery.of(context).size.height * 0.0,
-          right: MediaQuery.of(context).size.height * 0.0,
-        ),
+        height: MediaQuery.of(context).size.height * 0.16,
         child: ScrollConfiguration(
           behavior: MyCustomScrollBehavior(),
           child: SingleChildScrollView(
@@ -472,7 +469,7 @@ class _mainDashBoardState extends State<mainDashBoard> {
 
   restaurantContent() {
     return Container(
-        height: MediaQuery.of(context).size.height * 0.41,
+        height: MediaQuery.of(context).size.height * 0.415,
         width: MediaQuery.of(context).size.height * 1,
         child: ScrollConfiguration(
           behavior: MyCustomScrollBehavior(),
@@ -485,7 +482,11 @@ class _mainDashBoardState extends State<mainDashBoard> {
 
                 return GestureDetector(
                   onTap: () {
-                    print("Se presionó el ítem: ${restaurant.title}");
+                    Navigator.push(
+                      context,
+                      crearRuta(
+                          context, restaurantPage(restaurant: restaurant)),
+                    );
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width * 0.9,

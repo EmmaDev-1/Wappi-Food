@@ -1,6 +1,7 @@
 // ignore_for_file: camel_case_types
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:project/Navegation/navegationAnimation.dart';
 import 'package:project/navigationBar/navBar.dart';
 import '../Register/register.dart';
 
@@ -40,35 +41,6 @@ class _loginPageState extends State<loginPage> {
         _animacionIniciada = true;
       });
     }
-  }
-
-  PageRouteBuilder _crearRuta(BuildContext context, Widget destino) {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return Stack(
-          children: [
-            SlideTransition(
-              position: Tween<Offset>(
-                begin: Offset.zero,
-                end: const Offset(-1.0, 0.0),
-              ).animate(
-                  CurvedAnimation(parent: animation, curve: Curves.easeInOut)),
-              child: const loginPage(),
-            ),
-            SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(1.0, 0.0),
-                end: Offset.zero,
-              ).animate(
-                  CurvedAnimation(parent: animation, curve: Curves.easeInOut)),
-              child: destino,
-            ),
-          ],
-        );
-      },
-      transitionDuration:
-          const Duration(milliseconds: 600), // Ajusta la duración aquí
-    );
   }
 
   @override
@@ -141,8 +113,8 @@ class _loginPageState extends State<loginPage> {
       decoration: const BoxDecoration(
         color: Color.fromARGB(255, 255, 255, 255),
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(60.0),
-          topRight: Radius.circular(60.0),
+          topLeft: Radius.circular(30.0),
+          topRight: Radius.circular(30.0),
         ),
       ),
       child: Column(
@@ -264,7 +236,7 @@ class _loginPageState extends State<loginPage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    _crearRuta(context, const registerPage()),
+                    crearRuta(context, registerPage()),
                   );
                 },
                 child: Text(
@@ -291,7 +263,7 @@ class _loginPageState extends State<loginPage> {
                 );
               },
               style: ElevatedButton.styleFrom(
-                primary: const Color.fromARGB(
+                backgroundColor: const Color.fromARGB(
                     255, 255, 94, 0), // Puedes cambiar el color aquí
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
