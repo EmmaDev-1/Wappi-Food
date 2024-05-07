@@ -230,7 +230,7 @@ class _mainDashBoardState extends State<mainDashBoard> {
                                           height: MediaQuery.of(context)
                                                   .size
                                                   .height *
-                                              0.037,
+                                              0.039,
                                           child: Center(
                                             child: CircularProgressIndicator(
                                               valueColor:
