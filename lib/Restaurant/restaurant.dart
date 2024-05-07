@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
-import 'package:project/DashBoard/mainDashBoard.dart';
+import 'package:project/Models/listRestaurants.dart';
 import 'package:project/Restaurant/iteamSlider.dart';
+import 'package:project/navigationBar/notificationBar.dart';
 
 class restaurantPage extends StatefulWidget {
   final ListRestaurant restaurant;
@@ -68,7 +67,7 @@ class _restaurantPageState extends State<restaurantPage> {
     ),
     ListRestaurantIteam(
       imagePath: 'assets/images/menu_iteam_6.webp',
-      title: 'El Diable Loaded Fries™',
+      title: 'El Diablo Loaded Fries™',
       description: 'Natural-Cut fries topped with fiery habanero sauce, '
           'shredded cheese, and jalapeno coins',
       price: 95.00,
@@ -96,6 +95,12 @@ class _restaurantPageState extends State<restaurantPage> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    setStatusBarDarkStyle();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
@@ -108,7 +113,7 @@ class _restaurantPageState extends State<restaurantPage> {
   disenoSuperior() {
     return SliverAppBar(
       leading: IconButton(
-        icon: Icon(Icons.arrow_back),
+        icon: const Icon(Icons.arrow_back),
         onPressed: () {
           Navigator.of(context).pop();
         },
@@ -186,7 +191,7 @@ class _restaurantPageState extends State<restaurantPage> {
                       bottom: MediaQuery.of(context).size.height * 0.01,
                     ),
                     child: Text(
-                      '${widget.restaurant.title}',
+                      widget.restaurant.title,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -201,7 +206,7 @@ class _restaurantPageState extends State<restaurantPage> {
                 : null,
             background: Container(
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 238, 238, 238),
+                color: const Color.fromARGB(255, 238, 238, 238),
                 image: DecorationImage(
                   image: AssetImage(widget.restaurant.imagePath),
                   fit: BoxFit.contain,
@@ -222,8 +227,8 @@ class _restaurantPageState extends State<restaurantPage> {
           ),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: Color.fromARGB(255, 238, 238, 238),
-            borderRadius: BorderRadius.only(
+            color: const Color.fromARGB(255, 238, 238, 238),
+            borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(30), topRight: Radius.circular(30)),
             boxShadow: [
               BoxShadow(
@@ -232,7 +237,7 @@ class _restaurantPageState extends State<restaurantPage> {
                 spreadRadius: 0.6, // Cuánto se expande la sombra
                 blurRadius: 6, // Cuánto se difumina la sombra
                 offset:
-                    Offset(0, -6), // Desplazamiento de la sombra (eje X, eje Y)
+                    const Offset(0, -6), // Desplazamiento de la sombra (eje X, eje Y)
               ),
             ],
           ),
@@ -245,17 +250,17 @@ class _restaurantPageState extends State<restaurantPage> {
     return SliverToBoxAdapter(
       child: Container(
         height: MediaQuery.of(context).size.height * 1.49,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Color.fromARGB(255, 238, 238, 238),
         ),
         child: Column(
           children: [
-            Container(
+            SizedBox(
               height: MediaQuery.of(context).size.height * 0.065,
               width: MediaQuery.of(context).size.height * 1,
               child: Row(
                 children: [
-                  Container(
+                  SizedBox(
                     height: MediaQuery.of(context).size.height * 0.08,
                     width: MediaQuery.of(context).size.height * 0.14,
                     child: Column(
@@ -286,9 +291,9 @@ class _restaurantPageState extends State<restaurantPage> {
                   Container(
                     height: MediaQuery.of(context).size.height * 0.05,
                     width: 1,
-                    color: Color.fromARGB(255, 177, 177, 177),
+                    color: const Color.fromARGB(255, 177, 177, 177),
                   ),
-                  Container(
+                  SizedBox(
                     height: MediaQuery.of(context).size.height * 0.08,
                     width: MediaQuery.of(context).size.height * 0.12,
                     child: Column(
@@ -319,7 +324,7 @@ class _restaurantPageState extends State<restaurantPage> {
                   SizedBox(
                     width: MediaQuery.of(context).size.height * 0.07,
                   ),
-                  Container(
+                  SizedBox(
                     height: MediaQuery.of(context).size.height * 0.08,
                     width: MediaQuery.of(context).size.height * 0.1,
                     child: Row(
@@ -336,7 +341,7 @@ class _restaurantPageState extends State<restaurantPage> {
                             fontWeight: FontWeight.bold,
                             fontSize: MediaQuery.of(context).size.width * 0.055,
                             fontFamily: 'Quicksand-Bold',
-                            color: Color.fromARGB(255, 255, 94, 0),
+                            color: const Color.fromARGB(255, 255, 94, 0),
                           ),
                         ),
                       ],
@@ -353,7 +358,7 @@ class _restaurantPageState extends State<restaurantPage> {
               ),
               child: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.menu_rounded,
                     size: 20,
                   ),
@@ -400,13 +405,13 @@ class _restaurantPageState extends State<restaurantPage> {
                 ),
                 child: Row(
                   children: [
-                    Container(
+                    SizedBox(
                       width: MediaQuery.of(context).size.width * 0.6,
                       height: MediaQuery.of(context).size.height * 0.12,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Container(
+                          SizedBox(
                             width: MediaQuery.of(context).size.width * 0.45,
                             child: Text(
                               restaurantIteam.title,
@@ -423,7 +428,7 @@ class _restaurantPageState extends State<restaurantPage> {
                               maxLines: 1,
                             ),
                           ),
-                          Container(
+                          SizedBox(
                             width: MediaQuery.of(context).size.width * 0.45,
                             child: Text(
                               restaurantIteam.description,
@@ -440,7 +445,7 @@ class _restaurantPageState extends State<restaurantPage> {
                               maxLines: 2,
                             ),
                           ),
-                          Container(
+                          SizedBox(
                             width: MediaQuery.of(context).size.width * 0.45,
                             child: Text(
                               '\$${restaurantIteam.price} Mx',
@@ -478,7 +483,7 @@ class _restaurantPageState extends State<restaurantPage> {
               Container(
                 height: 1,
                 width: MediaQuery.of(context).size.height * 0.39,
-                color: Color.fromARGB(255, 221, 221, 221),
+                color: const Color.fromARGB(255, 221, 221, 221),
               ),
             ],
           ),

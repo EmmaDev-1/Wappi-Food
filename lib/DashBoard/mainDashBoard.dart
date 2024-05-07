@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:project/Geolocation/getGeolocation.dart';
+import 'package:project/Models/listRestaurants.dart';
 import 'package:project/Navegation/navegationAnimation.dart';
 import 'package:project/Order/mainOrders.dart';
 import 'package:project/Profile/mainProfile.dart';
 import 'package:project/Restaurant/restaurant.dart';
-
+import 'package:project/navigationBar/notificationBar.dart';
 import '../ShoppingBag/mainShoppingBags.dart';
 
 class mainDashBoard extends StatefulWidget {
@@ -21,23 +23,6 @@ class ListItem {
   ListItem({required this.imagePath, required this.title});
 }
 
-class ListRestaurant {
-  final String imagePath;
-  final String title;
-  final double stars;
-  final String time;
-  final String deliveryCost;
-  bool isFavorite;
-
-  ListRestaurant(
-      {required this.imagePath,
-      required this.title,
-      required this.stars,
-      required this.time,
-      required this.deliveryCost,
-      required this.isFavorite});
-}
-
 class MyCustomScrollBehavior extends ScrollBehavior {
   Widget buildViewportChrome(
       BuildContext context, Widget child, AxisDirection axisDirection) {
@@ -51,13 +36,13 @@ class _mainDashBoardState extends State<mainDashBoard> {
   Timer? _timer;
   bool _isExpanded = false;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  late Future<String> _locationFuture;
   //List Section
 
   //Body List
   int navBarIndex = 0;
 
-  List navBody = [mainOrder(), mainProfile()];
+  List navBody = [const mainOrder(), const mainProfile()];
 
   //Image list
   List<ListItem> items = [
@@ -72,80 +57,6 @@ class _mainDashBoardState extends State<mainDashBoard> {
     ListItem(imagePath: 'assets/images/icon_hotDog.png', title: 'Hot Dogs'),
   ];
 
-  //Restaurants list
-  List<ListRestaurant> restaurants = [
-    ListRestaurant(
-        imagePath: 'assets/images/restaurant_carlsJr.png',
-        title: 'Carl\'s Jr',
-        stars: 5.0,
-        time: '20-30',
-        deliveryCost: '15',
-        isFavorite: false),
-    ListRestaurant(
-        imagePath: 'assets/images/restaurant_chilis.png',
-        title: 'Chili\'s',
-        stars: 4.5,
-        time: '20-45',
-        deliveryCost: '25',
-        isFavorite: false),
-    ListRestaurant(
-        imagePath: 'assets/images/restaurant_donuts.png',
-        title: 'Donkin Donuts',
-        stars: 3.8,
-        time: '15-20',
-        deliveryCost: '10',
-        isFavorite: false),
-    ListRestaurant(
-        imagePath: 'assets/images/restaurant_mcdonalds.png',
-        title: 'Mc Donald\'s',
-        stars: 3.4,
-        time: '20-30',
-        deliveryCost: '15',
-        isFavorite: false),
-    ListRestaurant(
-        imagePath: 'assets/images/restaurant_pandaExpress.png',
-        title: 'Panda Express',
-        stars: 3.1,
-        time: '20-30',
-        deliveryCost: '15',
-        isFavorite: false),
-    ListRestaurant(
-        imagePath: 'assets/images/restaurant_pizzaHot.png',
-        title: 'Pizza Hut',
-        stars: 4.9,
-        time: '40-50',
-        deliveryCost: '25',
-        isFavorite: false),
-    ListRestaurant(
-        imagePath: 'assets/images/restaurant_subway.png',
-        title: 'Subway',
-        stars: 4.0,
-        time: '25-45',
-        deliveryCost: '25',
-        isFavorite: false),
-    ListRestaurant(
-        imagePath: 'assets/images/restaurant_taqueria.jpg',
-        title: 'Gonsaleña',
-        stars: 5,
-        time: '10-15',
-        deliveryCost: '15',
-        isFavorite: false),
-    ListRestaurant(
-        imagePath: 'assets/images/restaurant_vips.png',
-        title: 'Vips',
-        stars: 4.9,
-        time: '30-50',
-        deliveryCost: '30',
-        isFavorite: false),
-    ListRestaurant(
-        imagePath: 'assets/images/restaurant_wingStop.png',
-        title: 'Wing Stop',
-        stars: 4.6,
-        time: '30-45',
-        deliveryCost: '20',
-        isFavorite: false),
-  ];
-
   //Image list
   final List<String> _imageList = [
     'assets/images/carusel_img3.jpg',
@@ -158,12 +69,14 @@ class _mainDashBoardState extends State<mainDashBoard> {
   ];
 
   //Controllers
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     _startTimer();
+    setStatusBarLightStyle();
+    _locationFuture = getLocation(context);
   }
 
   void _startTimer() {
@@ -189,28 +102,26 @@ class _mainDashBoardState extends State<mainDashBoard> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        key: _scaffoldKey,
-        extendBody: true,
-        body: Builder(
-          builder: (context) => SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  color: Colors.white,
-                  height: MediaQuery.of(context).size.height * 1,
-                  width: MediaQuery.of(context).size.width * 1,
-                  child: Column(
-                    children: [
-                      topContent(),
-                      foodContent(),
-                      restaurantContent(),
-                    ],
-                  ),
-                )
-              ],
-            ),
+    return Scaffold(
+      key: _scaffoldKey,
+      extendBody: true,
+      body: Builder(
+        builder: (context) => SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                color: Colors.white,
+                height: MediaQuery.of(context).size.height * 1,
+                width: MediaQuery.of(context).size.width * 1,
+                child: Column(
+                  children: [
+                    topContent(),
+                    foodContent(),
+                    restaurantContent(),
+                  ],
+                ),
+              )
+            ],
           ),
         ),
       ),
@@ -218,7 +129,7 @@ class _mainDashBoardState extends State<mainDashBoard> {
   }
 
   topContent() {
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height * 0.35,
       child: Stack(
         children: [
@@ -258,7 +169,7 @@ class _mainDashBoardState extends State<mainDashBoard> {
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 250),
                         width: _isExpanded
-                            ? MediaQuery.of(context).size.width * 0.53
+                            ? MediaQuery.of(context).size.width * 0.65
                             : MediaQuery.of(context).size.width * 0.12,
                         height: MediaQuery.of(context).size.height * 0.055,
                         margin: EdgeInsets.only(
@@ -270,47 +181,72 @@ class _mainDashBoardState extends State<mainDashBoard> {
                               ? const Color.fromARGB(255, 255, 94, 0)
                               : const Color.fromARGB(255, 255, 94, 0),
                           borderRadius: BorderRadius.horizontal(
-                            left: Radius.circular(_isExpanded
-                                ? 0
-                                : 100), // Sin bordes redondeados en la izquierda
+                            left: Radius.circular(_isExpanded ? 0 : 100),
                             right: Radius.circular(_isExpanded ? 100 : 100),
                           ),
                         ),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(
-                                left:
-                                    MediaQuery.of(context).size.height * 0.006,
-                              ),
-                              child: Icon(
-                                Icons.location_on_outlined,
-                                size: 35,
-                                color: _isExpanded
-                                    ? Colors.white
-                                    : Colors
-                                        .white, // Cambia el color del icono según el estado
-                              ),
-                            ),
-                            if (_isExpanded) // Muestra el texto solo si está expandido
-                              const Flexible(
-                                // Envuelve el texto en un widget Flexible
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 0.0),
-                                  child: Text(
-                                    'Your Address',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 18.0,
-                                      fontFamily: 'QuickSand-Bold',
-                                      color: Color.fromARGB(255, 255, 255, 255),
-                                    ),
-                                    overflow: TextOverflow
-                                        .ellipsis, // Añade elipsis si el texto es demasiado largo
-                                  ),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  left: MediaQuery.of(context).size.height *
+                                      0.006,
+                                ),
+                                child: Icon(
+                                  Icons.location_on_outlined,
+                                  size: 35,
+                                  color:
+                                      _isExpanded ? Colors.white : Colors.white,
                                 ),
                               ),
-                          ],
+                              if (_isExpanded)
+                                Center(
+                                  child: FutureBuilder<String>(
+                                    future: _locationFuture,
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        return Text(
+                                          '${snapshot.data}',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.04,
+                                            fontFamily: 'QuickSand-Bold',
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255),
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        );
+                                      } else {
+                                        return Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.45,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.037,
+                                          child: Center(
+                                            child: CircularProgressIndicator(
+                                              valueColor:
+                                                  AlwaysStoppedAnimation(
+                                                      Color.fromARGB(
+                                                          255, 255, 255, 255)),
+                                              strokeWidth: 2.5,
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                )
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -318,7 +254,7 @@ class _mainDashBoardState extends State<mainDashBoard> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          crearRuta(context, mainShoppingBag()),
+                          crearRuta(context, const mainShoppingBag()),
                         );
                       },
                       child: Container(
@@ -336,7 +272,7 @@ class _mainDashBoardState extends State<mainDashBoard> {
                             borderRadius: BorderRadius.horizontal(
                                 left: Radius.circular(100),
                                 right: Radius.circular(100))),
-                        child: Icon(
+                        child: const Icon(
                           Icons.shopping_bag_outlined,
                           size: 35,
                           color: Color.fromARGB(255, 255, 255, 255),
@@ -394,7 +330,7 @@ class _mainDashBoardState extends State<mainDashBoard> {
   }
 
   foodContent() {
-    return Container(
+    return SizedBox(
         height: MediaQuery.of(context).size.height * 0.16,
         child: ScrollConfiguration(
           behavior: MyCustomScrollBehavior(),
@@ -468,7 +404,7 @@ class _mainDashBoardState extends State<mainDashBoard> {
   }
 
   restaurantContent() {
-    return Container(
+    return SizedBox(
         height: MediaQuery.of(context).size.height * 0.415,
         width: MediaQuery.of(context).size.height * 1,
         child: ScrollConfiguration(
@@ -522,13 +458,13 @@ class _mainDashBoardState extends State<mainDashBoard> {
                             ), // Bordes redondeados
                           ),
                         ),
-                        Container(
+                        SizedBox(
                           width: MediaQuery.of(context).size.width * 0.47,
                           height: MediaQuery.of(context).size.height * 0.12,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Container(
+                              SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.45,
                                 child: Text(
                                   restaurant.title,
@@ -578,7 +514,7 @@ class _mainDashBoardState extends State<mainDashBoard> {
                                     Icons.motorcycle,
                                     color: Color.fromARGB(255, 0, 0, 0),
                                   ),
-                                  Container(
+                                  SizedBox(
                                     width:
                                         MediaQuery.of(context).size.width * 0.4,
                                     child: Text(

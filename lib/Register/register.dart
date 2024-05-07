@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:project/navigationBar/navBar.dart';
+import 'package:project/navigationBar/notificationBar.dart';
 
 class registerPage extends StatefulWidget {
   const registerPage({super.key});
@@ -19,12 +21,14 @@ class _registerPageState extends State<registerPage> {
 
   //Controllers
   late TextEditingController userController;
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController passwordControllerRepeat = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    setStatusBarLightStyle();
     userController = TextEditingController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
@@ -32,6 +36,76 @@ class _registerPageState extends State<registerPage> {
         _animacionEjecutada = true;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    userController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    passwordControllerRepeat.dispose();
+    super.dispose();
+  }
+
+  void register() async {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(
+            child: CircularProgressIndicator(
+              valueColor:
+                  AlwaysStoppedAnimation(Color.fromARGB(255, 255, 94, 0)),
+            ),
+          );
+        });
+    // Verifica que las contraseñas coincidan
+    if (passwordController.text != passwordControllerRepeat.text) {
+      Navigator.pop(context);
+      _showErrorDialog(
+        'Password error',
+        'Passwords doesn\'t match. Please, verify and try again.',
+      );
+      return;
+    }
+
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const navigationBar()),
+      );
+    } catch (e) {
+      Navigator.pop(context);
+      _showErrorDialog(
+        'Error',
+        'An unexpected error occurred. Please try again.',
+      );
+    }
+  }
+
+  Future<void> _showErrorDialog(String title, String message) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Cierra el diálogo
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -52,7 +126,7 @@ class _registerPageState extends State<registerPage> {
                       disenoSuperior(),
                       Positioned(
                         top: MediaQuery.of(context).size.height * 0.30,
-                        child: register(),
+                        child: registerSection(),
                       ),
                     ],
                   ),
@@ -94,7 +168,7 @@ class _registerPageState extends State<registerPage> {
     );
   }
 
-  Widget register() {
+  Widget registerSection() {
     return Container(
       height: MediaQuery.of(context).size.height * 0.7,
       width: MediaQuery.of(context).size.width * 1,
@@ -138,6 +212,7 @@ class _registerPageState extends State<registerPage> {
               top: MediaQuery.of(context).size.height * 0.02,
             ),
             child: TextField(
+              controller: userController,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: const Color.fromARGB(
@@ -168,6 +243,7 @@ class _registerPageState extends State<registerPage> {
               top: MediaQuery.of(context).size.height * 0.02,
             ),
             child: TextField(
+              controller: emailController,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: const Color.fromARGB(
@@ -305,12 +381,7 @@ class _registerPageState extends State<registerPage> {
               top: MediaQuery.of(context).size.height * 0.05,
             ),
             child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => navigationBar()),
-                );
-              },
+              onPressed: () => register(),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromARGB(
                     255, 255, 94, 0), // Puedes cambiar el color aquí

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project/DashBoard/mainDashBoard.dart';
 import 'package:lottie/lottie.dart';
+import 'package:project/navigationBar/notificationBar.dart';
 
 class mainShoppingBag extends StatefulWidget {
   const mainShoppingBag({super.key});
@@ -30,7 +31,7 @@ class _mainShoppingBagState extends State<mainShoppingBag>
   //variables
 
   //Controllers
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   late AnimationController successAnimationController;
 
   //ShoppingList list
@@ -70,32 +71,31 @@ class _mainShoppingBagState extends State<mainShoppingBag>
   @override
   void initState() {
     super.initState();
+    setStatusBarDarkStyle();
     successAnimationController =
-        AnimationController(duration: Duration(seconds: 3), vsync: this);
+        AnimationController(duration: const Duration(seconds: 3), vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Builder(
-          builder: (context) => SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  color: Colors.white,
-                  height: MediaQuery.of(context).size.height * 1,
-                  width: MediaQuery.of(context).size.width * 1,
-                  child: Column(
-                    children: [
-                      headerContent(),
-                      shoppingListContent(),
-                      payBotton()
-                    ],
-                  ),
-                )
-              ],
-            ),
+    return Scaffold(
+      body: Builder(
+        builder: (context) => SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                color: Colors.white,
+                height: MediaQuery.of(context).size.height * 1,
+                width: MediaQuery.of(context).size.width * 1,
+                child: Column(
+                  children: [
+                    headerContent(),
+                    shoppingListContent(),
+                    payBotton()
+                  ],
+                ),
+              )
+            ],
           ),
         ),
       ),
@@ -123,21 +123,21 @@ class _mainShoppingBagState extends State<mainShoppingBag>
       ),
       child: Row(
         children: [
-          Container(
+          SizedBox(
             height: MediaQuery.of(context).size.height * 0.12,
             width: MediaQuery.of(context).size.width * 0.15,
             child: IconButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: Icon(
-                Icons.arrow_back_ios,
-                size: 30,
+              icon: const Icon(
+                Icons.arrow_back,
+                size: 25,
                 color: Color.fromARGB(255, 0, 0, 0),
               ),
             ),
           ),
-          Container(
+          SizedBox(
             width: MediaQuery.of(context).size.width * 0.65,
             child: Text(
               'Shopping Bag',
@@ -155,7 +155,7 @@ class _mainShoppingBagState extends State<mainShoppingBag>
   }
 
   shoppingListContent() {
-    return Container(
+    return SizedBox(
         height: MediaQuery.of(context).size.height * 0.81,
         width: MediaQuery.of(context).size.height * 1,
         child: ScrollConfiguration(
@@ -205,13 +205,13 @@ class _mainShoppingBagState extends State<mainShoppingBag>
                             ), // Bordes redondeados
                           ),
                         ),
-                        Container(
+                        SizedBox(
                           width: MediaQuery.of(context).size.width * 0.47,
                           height: MediaQuery.of(context).size.height * 0.1,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Container(
+                              SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.45,
                                 child: Text(
                                   shoppingList.title,
@@ -226,10 +226,10 @@ class _mainShoppingBagState extends State<mainShoppingBag>
                                   ),
                                 ),
                               ),
-                              Container(
+                              SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.45,
                                 child: Text(
-                                  '${shoppingList.restaurant}',
+                                  shoppingList.restaurant,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize:
@@ -305,7 +305,7 @@ class _mainShoppingBagState extends State<mainShoppingBag>
   }
 
   payBotton() {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.07,
       child: ElevatedButton(
@@ -317,15 +317,15 @@ class _mainShoppingBagState extends State<mainShoppingBag>
               return WillPopScope(
                 onWillPop: () async =>
                     false, // Evita que el diálogo se cierre con gestos o teclas de retorno.
-                child: Dialog(
-                  child: Container(
+                child: const Dialog(
+                  child: SizedBox(
                     height: 100,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         CircularProgressIndicator(
                           valueColor: AlwaysStoppedAnimation(
-                              const Color.fromARGB(255, 255, 94, 0)),
+                              Color.fromARGB(255, 255, 94, 0)),
                         ),
                         SizedBox(height: 20),
                         Text("Processing payment..."),
@@ -337,7 +337,7 @@ class _mainShoppingBagState extends State<mainShoppingBag>
             },
           );
 
-          Future.delayed(Duration(seconds: 2), () {
+          Future.delayed(const Duration(seconds: 2), () {
             // Aquí cerramos específicamente el Dialog del progreso
             Navigator.of(context, rootNavigator: true).pop('dialog');
             Navigator.of(context).pop();
@@ -370,9 +370,12 @@ class _mainShoppingBagState extends State<mainShoppingBag>
           });
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: Color.fromARGB(255, 255, 94, 0),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(23.0),
+          backgroundColor: const Color.fromARGB(255, 255, 94, 0),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(23.0),
+              topRight: Radius.circular(23.0),
+            ),
           ),
         ),
         child: Text(
@@ -381,7 +384,7 @@ class _mainShoppingBagState extends State<mainShoppingBag>
             fontWeight: FontWeight.bold,
             fontSize: MediaQuery.of(context).size.width * 0.045,
             fontFamily: 'Quicksand-Bold',
-            color: Color.fromARGB(255, 255, 255, 255),
+            color: const Color.fromARGB(255, 255, 255, 255),
           ),
         ),
       ),

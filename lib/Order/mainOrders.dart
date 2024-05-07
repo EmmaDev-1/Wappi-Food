@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:project/Models/listRestaurants.dart';
+import 'package:project/Order/orderDetails.dart';
+import 'package:project/Restaurant/restaurant.dart';
+import 'package:project/navigationBar/notificationBar.dart';
+
+import '../Navegation/navegationAnimation.dart';
 
 class mainOrder extends StatefulWidget {
   const mainOrder({super.key});
@@ -7,21 +13,24 @@ class mainOrder extends StatefulWidget {
   State<mainOrder> createState() => _mainOrderState();
 }
 
-class ListRestaurant {
+class ListOrdersRestaurant {
   final String imagePath;
   final String title;
   final int iteam;
   final String time;
   final String deliveryCost;
   bool isFavorite;
+  final ListRestaurant restaurant;
 
-  ListRestaurant(
-      {required this.imagePath,
-      required this.title,
-      required this.iteam,
-      required this.time,
-      required this.deliveryCost,
-      required this.isFavorite});
+  ListOrdersRestaurant({
+    required this.imagePath,
+    required this.title,
+    required this.iteam,
+    required this.time,
+    required this.deliveryCost,
+    required this.isFavorite,
+    required this.restaurant,
+  });
 }
 
 class MyCustomScrollBehavior extends ScrollBehavior {
@@ -32,62 +41,82 @@ class MyCustomScrollBehavior extends ScrollBehavior {
 }
 
 class _mainOrderState extends State<mainOrder> {
+  @override
+  void initState() {
+    super.initState();
+    setStatusBarDarkStyle();
+  }
+
   //Restaurants
   //Restaurants list
-  List<ListRestaurant> restaurants = [
-    ListRestaurant(
-        imagePath: 'assets/images/restaurant_taqueria.jpg',
-        title: 'Gonsaleña',
-        iteam: 2,
-        time: '3-Feb-2024',
-        deliveryCost: '200',
-        isFavorite: false),
-    ListRestaurant(
-        imagePath: 'assets/images/restaurant_carlsJr.png',
-        title: 'Carl\'s Jr',
-        iteam: 4,
-        time: '25-Jan-2024',
-        deliveryCost: '450',
-        isFavorite: false),
-    ListRestaurant(
-        imagePath: 'assets/images/restaurant_pizzaHot.png',
-        title: 'Pizza Hut',
-        iteam: 2,
-        time: '5-Jan-2024',
-        deliveryCost: '230',
-        isFavorite: false),
-    ListRestaurant(
-        imagePath: 'assets/images/restaurant_pandaExpress.png',
-        title: 'Panda Express',
-        iteam: 5,
-        time: '2-Jan-2024',
-        deliveryCost: '258',
-        isFavorite: false),
-    ListRestaurant(
-        imagePath: 'assets/images/restaurant_carlsJr.png',
-        title: 'Carl\'s Jr',
-        iteam: 2,
-        time: '27-Dec-2023',
-        deliveryCost: '489',
-        isFavorite: false),
-    ListRestaurant(
-        imagePath: 'assets/images/restaurant_mcdonalds.png',
-        title: 'Mc Donald\'s',
-        iteam: 1,
-        time: '15-Dec-2023',
-        deliveryCost: '125',
-        isFavorite: false),
-    ListRestaurant(
-        imagePath: 'assets/images/restaurant_wingStop.png',
-        title: 'Wing Stop',
-        iteam: 3,
-        time: '8-Dec-2023',
-        deliveryCost: '650',
-        isFavorite: false),
+  List<ListOrdersRestaurant> orderRestaurants = [
+    ListOrdersRestaurant(
+      imagePath: 'assets/images/restaurant_taqueria.jpg',
+      title: 'Gonsaleña',
+      iteam: 2,
+      time: '3-Feb-2024',
+      deliveryCost: '200',
+      isFavorite: false,
+      restaurant: restaurants.firstWhere((r) => r.title == 'Gonsaleña'),
+    ),
+    ListOrdersRestaurant(
+      imagePath: 'assets/images/restaurant_carlsJr.png',
+      title: 'Carl\'s Jr',
+      iteam: 4,
+      time: '25-Jan-2024',
+      deliveryCost: '450',
+      isFavorite: false,
+      restaurant: restaurants.firstWhere((r) => r.title == 'Carl\'s Jr'),
+    ),
+    ListOrdersRestaurant(
+      imagePath: 'assets/images/restaurant_pizzaHot.png',
+      title: 'Pizza Hut',
+      iteam: 2,
+      time: '5-Jan-2024',
+      deliveryCost: '230',
+      isFavorite: false,
+      restaurant: restaurants.firstWhere((r) => r.title == 'Pizza Hut'),
+    ),
+    ListOrdersRestaurant(
+      imagePath: 'assets/images/restaurant_pandaExpress.png',
+      title: 'Panda Express',
+      iteam: 5,
+      time: '2-Jan-2024',
+      deliveryCost: '258',
+      isFavorite: false,
+      restaurant: restaurants.firstWhere((r) => r.title == 'Panda Express'),
+    ),
+    ListOrdersRestaurant(
+      imagePath: 'assets/images/restaurant_carlsJr.png',
+      title: 'Carl\'s Jr',
+      iteam: 2,
+      time: '27-Dec-2023',
+      deliveryCost: '489',
+      isFavorite: false,
+      restaurant: restaurants.firstWhere((r) => r.title == 'Carl\'s Jr'),
+    ),
+    ListOrdersRestaurant(
+      imagePath: 'assets/images/restaurant_mcdonalds.png',
+      title: 'Mc Donald\'s',
+      iteam: 8,
+      time: '15-Dec-2023',
+      deliveryCost: '125',
+      isFavorite: false,
+      restaurant: restaurants.firstWhere((r) => r.title == 'Mc Donald\'s'),
+    ),
+    ListOrdersRestaurant(
+      imagePath: 'assets/images/restaurant_wingStop.png',
+      title: 'Wing Stop',
+      iteam: 3,
+      time: '8-Dec-2023',
+      deliveryCost: '650',
+      isFavorite: false,
+      restaurant: restaurants.firstWhere((r) => r.title == 'Wing Stop'),
+    ),
   ];
 
   //Controllers
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +151,7 @@ class _mainOrderState extends State<mainOrder> {
       width: MediaQuery.of(context).size.width * 1,
       padding: EdgeInsets.only(
         top: MediaQuery.of(context).size.height * 0.065,
-        left: MediaQuery.of(context).size.height * 0.015,
+        left: MediaQuery.of(context).size.height * 0.02,
       ),
       decoration: BoxDecoration(
         color: const Color.fromARGB(255, 255, 255, 255),
@@ -136,7 +165,7 @@ class _mainOrderState extends State<mainOrder> {
         ],
       ),
       child: Text(
-        'My Orders',
+        'My Orders History',
         style: TextStyle(
           fontFamily: 'QuickSand-Bold',
           fontSize: MediaQuery.of(context).size.width * 0.07,
@@ -159,18 +188,12 @@ class _mainOrderState extends State<mainOrder> {
             controller: _scrollController,
             scrollDirection: Axis.vertical,
             child: Column(
-              children: List.generate(restaurants.length, (index) {
-                ListRestaurant restaurant = restaurants[index];
+              children: List.generate(orderRestaurants.length, (index) {
+                ListOrdersRestaurant orderRestaurant = orderRestaurants[index];
 
                 return GestureDetector(
                   onTap: () {
-                    /*
-                    Navigator.push(
-                      context,
-                      crearRuta(
-                          context, restaurantPage(restaurant: restaurant)),
-                    );
-                    */
+                    showOrderDetails(context, orderRestaurant);
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width * 1.0,
@@ -183,7 +206,7 @@ class _mainOrderState extends State<mainOrder> {
                       color: Colors.white,
                       boxShadow: [
                         BoxShadow(
-                          color: Color.fromARGB(255, 194, 194, 194)
+                          color: const Color.fromARGB(255, 194, 194, 194)
                               .withOpacity(0.2),
                           spreadRadius: 1,
                           blurRadius: 5,
@@ -220,7 +243,8 @@ class _mainOrderState extends State<mainOrder> {
                                         0.1,
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
-                                        image: AssetImage(restaurant.imagePath),
+                                        image: AssetImage(
+                                            orderRestaurant.imagePath),
                                         fit: BoxFit.contain,
                                       ), // Bordes redondeados
                                     ),
@@ -253,7 +277,7 @@ class _mainOrderState extends State<mainOrder> {
                             )
                           ],
                         ),
-                        Container(
+                        SizedBox(
                           width: MediaQuery.of(context).size.width * 0.4,
                           height: MediaQuery.of(context).size.height * 0.12,
                           child: Column(
@@ -266,7 +290,7 @@ class _mainOrderState extends State<mainOrder> {
                                       MediaQuery.of(context).size.height * 0.01,
                                 ),
                                 child: Text(
-                                  restaurant.title,
+                                  orderRestaurant.title,
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -285,7 +309,7 @@ class _mainOrderState extends State<mainOrder> {
                                       0.007,
                                 ),
                                 child: Text(
-                                  '${restaurant.iteam} iteams • \$${restaurant.deliveryCost}MX',
+                                  '${orderRestaurant.iteam} iteams • \$${orderRestaurant.deliveryCost}MX',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     fontWeight: FontWeight.w500,
@@ -304,7 +328,7 @@ class _mainOrderState extends State<mainOrder> {
                                       0.007,
                                 ),
                                 child: Text(
-                                  ' ${restaurant.time}',
+                                  ' ${orderRestaurant.time}',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
@@ -327,12 +351,14 @@ class _mainOrderState extends State<mainOrder> {
                           ),
                           child: ElevatedButton(
                             onPressed: () {
-                              /*
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => navigationBar()),
-                );
-                */
+                              Navigator.push(
+                                context,
+                                crearRuta(
+                                    context,
+                                    restaurantPage(
+                                        restaurant:
+                                            orderRestaurant.restaurant)),
+                              );
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color.fromARGB(255, 226,

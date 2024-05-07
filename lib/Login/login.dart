@@ -1,9 +1,13 @@
 // ignore_for_file: camel_case_types
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:flutter/widgets.dart';
 import 'package:project/Navegation/navegationAnimation.dart';
 import 'package:project/navigationBar/navBar.dart';
+import 'package:project/navigationBar/notificationBar.dart';
 import '../Register/register.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class loginPage extends StatefulWidget {
   const loginPage({super.key});
@@ -17,13 +21,14 @@ class _loginPageState extends State<loginPage> {
   bool _animacionEjecutada = false;
   bool _animacionIniciada = false;
   late String selectedtext = "";
-  late TextEditingController userController;
+  late TextEditingController emailController;
   TextEditingController passwordController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    userController = TextEditingController();
+    setStatusBarLightStyle();
+    emailController = TextEditingController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_animacionIniciada) {
         _iniciarAnimacion();
@@ -43,31 +48,75 @@ class _loginPageState extends State<loginPage> {
     }
   }
 
+  void signIn() async {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(
+            child: CircularProgressIndicator(
+              valueColor:
+                  AlwaysStoppedAnimation(Color.fromARGB(255, 255, 94, 0)),
+            ),
+          );
+        });
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailController.text, password: passwordController.text);
+
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const navigationBar()),
+      );
+    } catch (e) {
+      Navigator.pop(context);
+      _showErrorDialog();
+    }
+  }
+
+  Future<void> _showErrorDialog() async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: Text("Please check you're credentials."),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Cierra el diálogo
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        extendBody: true, // Extiende el cuerpo detrás de la barra de aplicación
-        body: Builder(
-          builder: (context) => SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  color: Colors.white,
-                  height: MediaQuery.of(context).size.height * 1,
-                  width: MediaQuery.of(context).size.width * 1,
-                  child: Stack(
-                    children: [
-                      disenoSuperior(),
-                      Positioned(
-                        top: MediaQuery.of(context).size.height * 0.30,
-                        child: login(),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
+    return Scaffold(
+      extendBody: true, // Extiende el cuerpo detrás de la barra de aplicación
+      body: Builder(
+        builder: (context) => SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                color: Colors.white,
+                height: MediaQuery.of(context).size.height * 1,
+                width: MediaQuery.of(context).size.width * 1,
+                child: Stack(
+                  children: [
+                    disenoSuperior(),
+                    Positioned(
+                      top: MediaQuery.of(context).size.height * 0.30,
+                      child: login(),
+                    ),
+                  ],
+                ),
+              )
+            ],
           ),
         ),
       ),
@@ -149,7 +198,7 @@ class _loginPageState extends State<loginPage> {
               top: MediaQuery.of(context).size.height * 0.02,
             ),
             child: TextField(
-              controller: userController,
+              controller: emailController,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: const Color.fromARGB(
@@ -227,25 +276,37 @@ class _loginPageState extends State<loginPage> {
                 ),
               )),
           Container(
+            height: MediaQuery.of(context).size.height * 0.047,
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  crearRuta(context, const registerPage()),
+                );
+              },
+              child: Text(
+                'Don\'t have and account? Sign Up Here',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.width * 0.035,
+                  color: const Color.fromARGB(255, 0, 0, 0),
+                  fontFamily: 'QuickSand-Bold',
+                ),
+              ),
+            ),
+          ),
+          Container(
             height: MediaQuery.of(context).size.height * 0.05,
             width: MediaQuery.of(context).size.width * 0.8,
-            child: Hero(
-              tag:
-                  'signInButton', // Etiqueta única para la transición compartida
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    crearRuta(context, registerPage()),
-                  );
-                },
-                child: Text(
-                  'Don\'t have and account? Sign Up Here',
-                  style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.width * 0.04,
-                    color: Color.fromARGB(255, 0, 0, 0),
-                  ),
-                ),
+            alignment: Alignment.center,
+            child: Text(
+              'Default user: test@gmail.com\nDefault password: 123456',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width * 0.035,
+                fontFamily: 'QuickSand',
+                color: const Color.fromARGB(255, 0, 0, 0),
               ),
             ),
           ),
@@ -256,12 +317,7 @@ class _loginPageState extends State<loginPage> {
               top: MediaQuery.of(context).size.height * 0.05,
             ),
             child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => navigationBar()),
-                );
-              },
+              onPressed: () => signIn(),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromARGB(
                     255, 255, 94, 0), // Puedes cambiar el color aquí
